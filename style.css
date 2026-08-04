@@ -11,6 +11,7 @@
     --overlay-1:rgba(255,255,255,.08); --overlay-2:rgba(255,255,255,.1); --overlay-3:rgba(255,255,255,.12);
     --glow1:rgba(99,102,241,.08); --glow2:rgba(139,124,246,.07);
     --header-bg:rgba(10,12,16,.82); --nav-bg:rgba(14,17,22,.92);
+    --opt-hover-bg:#232a3a;
     --r:20px;
   }
   :root[data-theme="light"]{
@@ -22,6 +23,7 @@
     --overlay-1:rgba(30,34,60,.05); --overlay-2:rgba(30,34,60,.07); --overlay-3:rgba(30,34,60,.06);
     --glow1:rgba(99,102,241,.05); --glow2:rgba(139,124,246,.05);
     --header-bg:rgba(244,245,250,.85); --nav-bg:rgba(255,255,255,.9);
+    --opt-hover-bg:#e6e9f4;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{background:var(--bg);color:var(--txt);
@@ -224,7 +226,7 @@
   .opt{background:var(--card2);border:1.5px solid var(--line);border-radius:14px;
     padding:15px 16px;cursor:pointer;transition:.16s cubic-bezier(.2,.7,.3,1);display:flex;gap:13px;
     align-items:flex-start;text-align:left;width:100%;color:var(--txt);font-size:14.5px;line-height:1.55}
-  .opt:hover:not(.locked){border-color:var(--line2);background:var(--card2);transform:translateY(-1px)}
+  .opt:hover:not(.locked){border-color:var(--line2);background:var(--opt-hover-bg);transform:translateY(-1px)}
   .opt:active:not(.locked){transform:scale(.99)}
   .opt .badge{width:28px;height:28px;border-radius:9px;flex:0 0 auto;display:grid;place-items:center;
     font-weight:800;font-size:13px;background:var(--bg);border:1px solid var(--line);color:var(--sub);transition:.16s}
