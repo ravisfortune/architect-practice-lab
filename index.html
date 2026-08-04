@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Certified Architect — Practice Lab</title>
+<script>try{var t=localStorage.getItem('cca_theme_v1')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -13,6 +14,7 @@
     <div class="logo">CA</div>
     <div class="htitle">Architect Practice Lab<span>Claude Certified — Foundations</span></div>
     <div class="hspace"></div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark theme">🌙</button>
     <div class="lang-toggle" id="langToggle">
       <button data-lang="en" class="on">EN</button>
       <button data-lang="hi">Hinglish</button>
@@ -86,6 +88,7 @@
 
 <!-- ================= QUIZ ================= -->
 <div class="screen" id="quiz">
+  <div class="quiz-layout">
   <div class="wrap">
     <div class="qtop">
       <button class="back" id="quizBack">‹</button>
@@ -113,6 +116,20 @@
         <button class="btn sub" id="nextBtn" title="Next">›</button>
       </div>
     </div>
+  </div>
+
+  <aside class="qsidebar" id="qSidebar">
+    <div class="qsidebar-head">
+      <b>Questions</b>
+      <span class="qsidebar-count" id="sidebarCount">1/10</span>
+    </div>
+    <div class="jump-legend">
+      <span><i class="dot cur"></i> Current</span>
+      <span><i class="dot ans"></i> Answered</span>
+      <span><i class="dot unans"></i> Unanswered</span>
+    </div>
+    <div class="jump-grid" id="sidebarGrid"></div>
+  </aside>
   </div>
 
   <div class="sheet-backdrop" id="jumpBackdrop"></div>

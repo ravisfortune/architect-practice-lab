@@ -88,6 +88,44 @@ function toast(msg){
   clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
+/* ---------- THEME ---------- */
+const LS_THEME='cca_theme_v1';
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  const btn=$('#themeToggle');
+  if(btn) btn.textContent = t==='light' ? '☀️' : '🌙';
+  localStorage.setItem(LS_THEME, t);
+}
+function initTheme(){
+  const saved=localStorage.getItem(LS_THEME);
+  const t = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  applyTheme(t);
+}
+$('#themeToggle').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme')||'dark';
+  applyTheme(cur==='dark'?'light':'dark');
+  toast(cur==='dark'?'Light mode on':'Dark mode on');
+};
+
+/* ---------- small animation helpers ---------- */
+function animateCount(el, to, duration){
+  duration = duration || 900;
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * to) + '%';
+    if(p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function bump(el){
+  if(!el) return;
+  el.classList.remove('bump');
+  void el.offsetWidth; // restart animation
+  el.classList.add('bump');
+}
+
 /* ---------- HOME ---------- */
 function renderHome(){
   const map=scenarios();
@@ -194,7 +232,8 @@ async function renderQ(){
   }
   $('#pbar').style.width=((session.idx+1)/session.list.length*100)+'%';
   $('#qScenario').textContent=q.sc;
-  if($('#jumpSheet').classList.contains('show')) renderJumpGrid();
+  $('#sidebarCount').textContent=`${session.idx+1}/${session.list.length}`;
+  renderJumpGrid();
 
   // reset UI
   $('#qExplain').className='explain';
@@ -242,27 +281,30 @@ function selectOpt(el){
 }
 
 function renderJumpGrid(){
-  const box=$('#jumpGrid'); box.innerHTML='';
-  session.list.forEach((q,i)=>{
-    const b=document.createElement('button');
-    b.className='jump-num';
-    b.textContent=i+1;
-    let isAnswered=false, isWrong=false;
-    if(session.isExam){
-      const picked=session.examAnswers[q._k];
-      isAnswered=!!picked;
-    } else {
-      const p=progress[q._k];
-      isAnswered=!!p;
-      isWrong = p && !p.correct;
-    }
-    if(i===session.idx) b.classList.add('current');
-    else if(isAnswered) b.classList.add('answered');
-    if(isAnswered && isWrong && !session.isExam) b.classList.add('wrong-mark');
-    b.onclick=()=>{
-      session.idx=i; selected=null; renderQ(); closeJumpSheet();
-    };
-    box.appendChild(b);
+  ['#jumpGrid','#sidebarGrid'].forEach(sel=>{
+    const box=$(sel); if(!box) return;
+    box.innerHTML='';
+    session.list.forEach((q,i)=>{
+      const b=document.createElement('button');
+      b.className='jump-num';
+      b.textContent=i+1;
+      let isAnswered=false, isWrong=false;
+      if(session.isExam){
+        const picked=session.examAnswers[q._k];
+        isAnswered=!!picked;
+      } else {
+        const p=progress[q._k];
+        isAnswered=!!p;
+        isWrong = p && !p.correct;
+      }
+      if(i===session.idx) b.classList.add('current');
+      else if(isAnswered) b.classList.add('answered');
+      if(isAnswered && isWrong && !session.isExam) b.classList.add('wrong-mark');
+      b.onclick=()=>{
+        session.idx=i; selected=null; renderQ(); closeJumpSheet();
+      };
+      box.appendChild(b);
+    });
   });
 }
 function openJumpSheet(){
@@ -294,7 +336,7 @@ function finishExam(){
   const total=list.length, wrong=total-right, pct=total?Math.round(right/total*100):0;
   const PASS_PCT=80;
   $('#resSet').textContent=session.name;
-  $('#resPct').textContent=pct+'%';
+  animateCount($('#resPct'), pct);
   $('#resRight').textContent=right;$('#resWrong').textContent=wrong;$('#resTotal').textContent=total;
   const circ=414.7, fill=$('#ringFill');
   fill.style.strokeDashoffset=circ-(circ*pct/100);
@@ -325,6 +367,7 @@ function doCheck(){
   const ok=selected===correctL;
   progress[q._k]={correct:ok,picked:selected}; saveProg(progress);
   $('#qScore').textContent=session.list.filter(x=>progress[x._k]&&progress[x._k].correct).length+' ✓';
+  bump($('#qScore'));
 }
 
 function lockAndReveal(picked){
@@ -413,7 +456,7 @@ function showResults(){
   const total=list.length, wrong=total-right;
   const pct=total?Math.round(right/total*100):0;
   $('#resSet').textContent=session.name;
-  $('#resPct').textContent=pct+'%';
+  animateCount($('#resPct'), pct);
   $('#resRight').textContent=right;$('#resWrong').textContent=wrong;$('#resTotal').textContent=total;
   const circ=414.7, fill=$('#ringFill');
   fill.style.strokeDashoffset=circ-(circ*pct/100);
@@ -710,6 +753,7 @@ go=function(id){
 };
 
 /* ---------- INIT ---------- */
+initTheme();
 if(!CONFIG.SHOW_HINGLISH){
   // English-only deployment: hide the toggle entirely and lock language to English
   lang='en';
