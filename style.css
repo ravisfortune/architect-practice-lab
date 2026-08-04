@@ -45,8 +45,9 @@
   .logo{width:35px;height:35px;border-radius:10px;flex:0 0 auto;
     background:linear-gradient(135deg,var(--acc),var(--acc2));
     display:grid;place-items:center;font-weight:800;color:var(--on-accent);font-size:15px;box-shadow:0 4px 16px var(--acc-glow)}
-  .htitle{font-size:15px;font-weight:700;letter-spacing:.1px;line-height:1.15;color:var(--txt-strong)}
-  .htitle span{display:block;font-size:11px;color:var(--mut);font-weight:500;margin-top:1px}
+  .htitle{font-size:15px;font-weight:700;letter-spacing:.1px;line-height:1.15;color:var(--txt-strong);min-width:0;overflow:hidden}
+  .htitle b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+  .htitle span{display:block;font-size:11px;color:var(--mut);font-weight:500;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .hspace{flex:1}
   .theme-toggle{background:var(--card);border:1px solid var(--line);color:var(--txt);
     width:36px;height:36px;border-radius:10px;font-size:15px;cursor:pointer;flex:0 0 auto;
