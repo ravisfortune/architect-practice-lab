@@ -181,7 +181,7 @@ function curQ(){ return session.list[session.idx]; }
 async function renderQ(){
   const q=curQ();
   $('#qSetName').textContent=session.name;
-  $('#qCounter').innerHTML=`Question ${session.idx+1} of ${session.list.length} <span class="jchev">▾</span>`;
+  $('#qCounter').innerHTML=`Question ${session.idx+1} of ${session.list.length} <span class="jchev">☰ Jump</span>`;
   if(session.isExam){
     $('#qScore').style.display='none';
     $('#examTimer').style.display='inline-flex';
