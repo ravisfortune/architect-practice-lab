@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Certified Architect — Practice Lab</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<header>
+  <div class="hbar">
+    <div class="logo">CA</div>
+    <div class="htitle">Architect Practice Lab<span>Claude Certified — Foundations</span></div>
+    <div class="hspace"></div>
+    <div class="lang-toggle" id="langToggle">
+      <button data-lang="en" class="on">EN</button>
+      <button data-lang="hi">Hinglish</button>
+    </div>
+  </div>
+  <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+</header>
+
+<!-- ================= HOME ================= -->
+<div class="screen active" id="home">
+  <div class="wrap">
+
+    <div class="bank-switch" id="bankTabs">
+      <button data-bank="guide" class="on">
+        <span class="bicon">📘</span>
+        <span class="blabel">Official Guide</span>
+        <span class="bcount">88</span>
+      </button>
+      <button data-bank="ccarf">
+        <span class="bicon">🗂️</span>
+        <span class="blabel">CCAR-F Bank</span>
+        <span class="bcount">162</span>
+      </button>
+    </div>
+
+    <div class="stat-strip">
+      <div class="sitem"><b id="stTotal">0</b><small>Questions</small></div>
+      <div class="sdiv"></div>
+      <div class="sitem"><b id="stDone">0</b><small>Attempted</small></div>
+      <div class="sdiv"></div>
+      <div class="sitem"><b id="stAcc">—</b><small>Accuracy</small></div>
+    </div>
+
+    <button class="primary-card violet" id="mockExamCard" style="display:none">
+      <div class="ic">⏱️</div>
+      <div class="meta"><b>Mock Exam</b><small>60 questions · 90 min · timed test</small></div>
+      <div class="chev">›</div>
+    </button>
+
+    <button class="primary-card" id="allBtn">
+      <div class="ic">🎯</div>
+      <div class="meta"><b id="allBtnLabel">Full Mock</b><small id="allBtnSub">All questions, shuffled</small>
+        <div class="barmini"><i id="allBar"></i></div>
+      </div>
+      <div class="cnt" id="allCnt">0</div>
+    </button>
+
+    <button class="primary-card" id="scenarioBtn">
+      <div class="ic">📚</div>
+      <div class="meta"><b>Practice by Scenario</b><small id="scenarioSub">Choose a topic to focus on</small></div>
+      <div class="chev">›</div>
+    </button>
+
+    <div class="home-footer">
+      <button class="ghost-btn" id="importBtn">➕ Add Questions</button>
+      <button class="ghost-btn" id="resetBtn">↺ Reset Progress</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SCENARIOS ================= -->
+<div class="screen" id="scenarios">
+  <div class="wrap">
+    <div class="rtop">
+      <button class="back" id="scenariosBack">‹</button>
+      <div class="rtitle"><b>Practice by Scenario</b><small id="scenariosSub">Choose a topic</small></div>
+    </div>
+    <div class="cards" id="scenarioCards"></div>
+  </div>
+</div>
+
+<!-- ================= QUIZ ================= -->
+<div class="screen" id="quiz">
+  <div class="wrap">
+    <div class="qtop">
+      <button class="back" id="quizBack">‹</button>
+      <button class="qmeta" id="qJumpBtn">
+        <b id="qSetName">Scenario</b>
+        <small id="qCounter">Question 1 of 10 <span class="jchev">▾</span></small>
+      </button>
+      <div class="qchip" id="qScore">0 ✓</div>
+      <div class="qchip exam-timer" id="examTimer" style="display:none">⏱️ 90:00</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qscn" id="qScenario"></div>
+      <div class="qtext" id="qText"></div>
+      <div class="hinglish-note" id="qLoad"><span class="spin"></span> Hinglish me translate ho raha hai…</div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explain" id="qExplain">
+        <div class="etitle" id="eTitle"></div>
+        <div id="eAns" class="ans" style="margin-bottom:8px"></div>
+        <div id="eBody"></div>
+      </div>
+      <div class="qnav">
+        <button class="btn sub" id="prevBtn" title="Previous">‹</button>
+        <button class="btn primary" id="checkBtn" disabled>Check Answer</button>
+        <button class="btn sub" id="nextBtn" title="Next">›</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet-backdrop" id="jumpBackdrop"></div>
+  <div class="jump-sheet" id="jumpSheet">
+    <div class="jump-handle"></div>
+    <div class="jump-head">
+      <b>Jump to Question</b>
+      <button class="jump-close" id="jumpClose">✕</button>
+    </div>
+    <div class="jump-legend">
+      <span><i class="dot cur"></i> Current</span>
+      <span><i class="dot ans"></i> Answered</span>
+      <span><i class="dot unans"></i> Unanswered</span>
+    </div>
+    <div class="jump-grid" id="jumpGrid"></div>
+  </div>
+</div>
+
+<!-- ================= RESULTS ================= -->
+<div class="screen" id="results">
+  <div class="wrap">
+    <div class="qtop">
+      <button class="back" id="resBack">‹</button>
+      <div class="qmeta"><b>Result</b><small id="resSet"></small></div>
+    </div>
+    <div class="result">
+      <div class="ring">
+        <svg width="150" height="150">
+          <circle cx="75" cy="75" r="66" fill="none" stroke="var(--line)" stroke-width="12"/>
+          <circle id="ringFill" cx="75" cy="75" r="66" fill="none" stroke="var(--acc)" stroke-width="12"
+            stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
+        </svg>
+        <div class="pct" id="resPct">0%</div>
+      </div>
+      <div class="rgrade" id="resGrade"></div>
+      <div class="rsub" id="resMsg"></div>
+      <div class="rbreak">
+        <div class="b"><b style="color:var(--good)" id="resRight">0</b><small>Correct</small></div>
+        <div class="b"><b style="color:var(--bad)" id="resWrong">0</b><small>Wrong</small></div>
+        <div class="b"><b id="resTotal">0</b><small>Total</small></div>
+      </div>
+      <div class="qnav">
+        <button class="btn sub" id="reviewBtn" style="width:auto;flex:1">Review Answers</button>
+        <button class="btn primary" id="retryBtn">Retry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= LEARN (chapter list) ================= -->
+<div class="screen" id="learn">
+  <div class="wrap">
+    <div class="learn-hero">
+      <h1>Concepts — bilkul simple</h1>
+      <p>Exam ka pura theory, chapter-by-chapter. Koi bhi topic pe <b style="color:var(--acc)">✨ Simple me samjhao</b> dabao — Claude use aasaan Hinglish me beginner ke liye samjha dega.</p>
+    </div>
+    <div class="chap-list" id="chapList"></div>
+    <div class="kv" style="margin-top:16px;text-align:center">13 chapters · 67 topics · official guide se</div>
+  </div>
+</div>
+
+<!-- ================= READER (one chapter) ================= -->
+<div class="screen" id="reader">
+  <div class="wrap reader">
+    <div class="rtop">
+      <button class="back" id="readerBack">‹</button>
+      <div class="rtitle"><b id="rChTitle">Chapter</b><small id="rChSub"></small></div>
+    </div>
+    <div class="chintro" id="rIntro"></div>
+    <div class="seclist" id="secList"></div>
+    <div class="qnav" style="margin:20px 0 10px">
+      <button class="btn sub" id="rPrevCh" style="width:auto;flex:1">‹ Prev Chapter</button>
+      <button class="btn primary" id="rNextCh">Next Chapter ›</button>
+    </div>
+  </div>
+</div>
+
+<!-- import modal -->
+<div class="modal" id="importModal">
+  <div class="sheet">
+    <div class="grabber"></div>
+    <h3>Add More Questions</h3>
+    <p>Neeche JSON paste karo (array of questions). Ye save ho jaayega aur home pe naye set ke roop me dikhega.</p>
+    <textarea id="importArea" placeholder='[{"sc":"My Topic","q":"Situation... **Question?**","o":[{"l":"A","t":"option","c":true},{"l":"B","t":"option","c":false}],"e":"Explanation why."}]'></textarea>
+    <div class="kv">Fields: <code>sc</code> scenario · <code>q</code> question · <code>o</code> options (<code>l</code>,<code>t</code>,<code>c</code>=correct) · <code>e</code> explanation. <br>Ya poora guide-format JSON bhi chalega.</div>
+    <div class="mrow">
+      <button class="ghost-btn" id="importCancel">Cancel</button>
+      <button class="btn primary" id="importSave" style="flex:1">Save & Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- bottom nav -->
+<nav class="bnav" id="bnav">
+  <div class="inner">
+    <button data-tab="practice" class="on"><span class="bi">🎯</span>Practice</button>
+    <button data-tab="learn"><span class="bi">📖</span>Learn</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+<script src="js/config.js"></script>
+<script src="js/data-guide.js"></script>
+<script src="js/data-ccarf.js"></script>
+<script src="js/theory.js"></script>
+<script src="js/hinglish-cache.js"></script>
+<script src="js/simplify-cache.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
