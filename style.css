@@ -176,9 +176,9 @@
   .sheet-backdrop.show{opacity:1;pointer-events:auto}
   .jump-sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--bg2);
     border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 20px 24px;
-    max-height:70vh;display:flex;flex-direction:column;
+    max-height:70vh;display:flex;flex-direction:column;pointer-events:none;
     transform:translateY(100%);transition:.3s cubic-bezier(.2,.8,.3,1);box-shadow:0 -20px 50px rgba(0,0,0,.5)}
-  .jump-sheet.show{transform:translateY(0)}
+  .jump-sheet.show{transform:translateY(0);pointer-events:auto}
   @media (min-width:640px){
     .jump-sheet{left:50%;right:auto;bottom:24px;width:min(92vw,460px);
       border-radius:22px;border:1px solid var(--line);transform:translate(-50%,20px) scale(.96);opacity:0;
